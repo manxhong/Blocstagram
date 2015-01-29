@@ -7,6 +7,10 @@
 //
 
 #import "BLCImagesTableViewController.h"
+#import "BLCDataSource.h"
+#import "BLCMedia.h"
+#import "BLCUser.h"
+#import "BLCComment.h"
 
 @interface BLCImagesTableViewController ()
 
@@ -18,7 +22,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.images = [NSMutableArray array];
+//        self.images = [NSMutableArray array];
     }
     return self;
     
@@ -27,13 +31,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    for (int i=1; i <= 10; i++) {
-        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
-        UIImage*image = [UIImage imageNamed:imageName];
-        if (image) {
-            [self.images addObject:image];
-        }
-    }
+//    for (int i=1; i <= 10; i++) {
+//        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
+//        UIImage*image = [UIImage imageNamed:imageName];
+//        if (image) {
+//            [self.images addObject:image];
+//        }
+//    }
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -60,7 +64,8 @@
 //#warning Incomplete method implementation.
 //    // Return the number of rows in the section. r
 //    return 0;
-    return self.images.count;
+//    return self.images.count;
+    return [self items].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -82,13 +87,17 @@
         [cell.contentView addSubview:imageView];
     }
     
-    UIImage *image = self.images[indexPath.row];
-    imageView.image = image;
+//    UIImage *image = self.images[indexPath.row];
+//    imageView.image = image;
+    BLCMedia *item = [self items][indexPath.row];
+    imageView.image = item.image;
     return cell;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UIImage *image = self.images[indexPath.row];
+//    UIImage *image = self.images[indexPath.row];
+    BLCMedia *item = [self items][indexPath.row];
+    UIImage *image = item.image;
     return (CGRectGetWidth(self.view.frame)/image.size.width) *image.size.height;
 }
 
@@ -102,6 +111,10 @@
     [self.images removeObjectAtIndex:indexPath.row];
     
     [tableView reloadData];
+}
+
+-(NSArray*) items{
+    return [BLCDataSource sharedInstance].mediaItems;
 }
 /*
 // Override to support conditional editing of the table view.
