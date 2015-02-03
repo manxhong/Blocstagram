@@ -108,7 +108,12 @@
 
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self.images removeObjectAtIndex:indexPath.row];
+    
+    
+//    [self.images removeObjectAtIndex:indexPath.row];
+    NSMutableArray* mutableArray = [self items].mutableCopy;
+    [mutableArray removeObjectAtIndex:indexPath.row];
+    [BLCDataSource sharedInstance].mediaItems = (NSArray*) mutableArray;
     
     [tableView reloadData];
 }
