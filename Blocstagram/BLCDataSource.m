@@ -64,6 +64,7 @@
         }
     }
     self.mediaItems = randomMediaItems;
+    NSLog(@"%@",self.mediaItems);
 }
 
 -(BLCUser *) randomUser {

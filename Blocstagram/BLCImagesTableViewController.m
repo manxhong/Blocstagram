@@ -11,6 +11,7 @@
 #import "BLCMedia.h"
 #import "BLCUser.h"
 #import "BLCComment.h"
+#import "BLCMediaTableViewCell.h"
 
 @interface BLCImagesTableViewController ()
 
@@ -44,7 +45,7 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"imageCell"];
+    [self.tableView registerClass:[BLCMediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -69,28 +70,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell" forIndexPath:indexPath];
-    
-    // Configure the cell...
-    static NSInteger imageViewTag = 1234;
-    UIImageView *imageView = (UIImageView*)[cell.contentView viewWithTag:imageViewTag];
-    
-    if (!imageView) {
-        //This is a new cell, it doesn't have an image view yet
-        imageView = [[UIImageView alloc]init];
-        imageView.contentMode = UIViewContentModeScaleToFill;
-        
-        imageView.frame = cell.contentView.bounds;
-        imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        
-        imageView.tag = imageViewTag;
-        [cell.contentView addSubview:imageView];
-    }
-    
-//    UIImage *image = self.images[indexPath.row];
-//    imageView.image = image;
-    BLCMedia *item = [self items][indexPath.row];
-    imageView.image = item.image;
+
+    BLCMediaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mediaCell" forIndexPath:indexPath];
+    cell.mediaItem =[BLCDataSource sharedInstance].mediaItems[indexPath.row];
     return cell;
 }
 
@@ -106,17 +88,17 @@
     return YES;
 }
 
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
-//    [self.images removeObjectAtIndex:indexPath.row];
-    NSMutableArray* mutableArray = [self items].mutableCopy;
-    [mutableArray removeObjectAtIndex:indexPath.row];
-    [BLCDataSource sharedInstance].mediaItems = (NSArray*) mutableArray;
-    
-    [tableView reloadData];
-}
+//
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//    
+////    [self.images removeObjectAtIndex:indexPath.row];
+//    NSMutableArray* mutableArray = [self items].mutableCopy;
+//    [mutableArray removeObjectAtIndex:indexPath.row];
+//    [BLCDataSource sharedInstance].mediaItems = (NSArray*) mutableArray;
+//    
+//    [tableView reloadData];
+//}
 
 -(NSArray*) items{
     return [BLCDataSource sharedInstance].mediaItems;
@@ -129,17 +111,14 @@
 }
 */
 
-/*
-// Override to support editing the table view.
+
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.
